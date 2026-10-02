@@ -19,8 +19,9 @@ resource "random_pet" "project_id" {
 }
 
 resource "local_file" "project_summary" {
-  filename = "${path.module}/generated-project-summary.txt"
-  content  = "ResilientOps project identifier: ${random_pet.project_id.id}\n"
+  filename        = "${path.module}/generated-project-summary.txt"
+  content         = "ResilientOps project identifier: ${random_pet.project_id.id}\n"
+  file_permission = "0644"
 }
 
 output "project_id" {
