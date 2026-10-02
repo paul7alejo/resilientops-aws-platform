@@ -14,6 +14,7 @@ terraform {
 }
 
 resource "random_pet" "project_id" {
+  prefix = var.project_prefix
   length = 2
 }
 
