@@ -23,3 +23,25 @@ resource "aws_vpc" "resilientops" {
     Environment = "learning"
   }
 }
+resource "aws_subnet" "public" {
+  vpc_id                  = aws_vpc.resilientops.id
+  cidr_block              = var.public_subnet_cidr
+  availability_zone       = "${var.aws_region}a"
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "resilientops-public-subnet"
+    Tier = "public"
+  }
+}
+
+resource "aws_subnet" "private_app" {
+  vpc_id            = aws_vpc.resilientops.id
+  cidr_block        = var.private_subnet_cidr
+  availability_zone = "${var.aws_region}a"
+
+  tags = {
+    Name = "resilientops-private-app-subnet"
+    Tier = "private"
+  }
+}
