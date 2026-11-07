@@ -1,0 +1,12 @@
+# Use this in every OTHER stack (network, compute, ...), not in bootstrap.
+# Replace BUCKET_NAME with the `state_bucket` output from the bootstrap stack,
+# and change `key` per stack (for example "network/terraform.tfstate").
+terraform {
+  backend "s3" {
+    bucket       = "BUCKET_NAME"
+    key          = "network/terraform.tfstate"
+    region       = "ap-southeast-2"
+    encrypt      = true
+    use_lockfile = true # S3 native locking, no DynamoDB table needed
+  }
+}

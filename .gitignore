@@ -9,3 +9,7 @@ crash.*.log
 .env.*
 !.env.example
 evidence/private/
+
+# Terraform plan files
+tfplan
+*.tfplan
