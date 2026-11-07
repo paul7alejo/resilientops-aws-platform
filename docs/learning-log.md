@@ -38,6 +38,7 @@ The `local_file` resource depends on `random_pet.project_id` because its content
 
 ```hcl
 random_pet.project_id.id
+```
 
 ## 2026-10-03 — AWS networking foundation
 
@@ -84,3 +85,51 @@ No AWS resources were applied. The configuration was validated and reviewed usin
 - Why should production workloads use multiple Availability Zones?
 - How should security-group rules be separated as the architecture grows?
 - How should Terraform state be stored and protected for team environments?
+
+## 2026-10-04 — Linux foundation lab
+
+### What I learned
+
+- Linux services should run with a restricted identity rather than as `root`.
+- File ownership and permission modes control which users can read, modify, or enter files and directories.
+- A running process is not necessarily ready to accept traffic immediately.
+- A service listening inside a container is not automatically exposed to the host or internet.
+- Process, port, connection, and log checks provide an evidence-based troubleshooting sequence.
+- Linux permissions and AWS security groups protect different layers of an application.
+
+### What I built
+
+- An Ubuntu 24.04 Linux environment using Colima and Docker.
+- An application filesystem under `/opt/resilientops`.
+- A non-interactive `resilientops` system user and group.
+- Root-owned application code and configuration with restricted group access.
+- Service-owned logging directories and files.
+- A temporary HTTP service running as `resilientops` on TCP/8080.
+
+### What I proved
+
+- The service account could read its configuration.
+- The service account could write application logs.
+- The service account could not modify the protected configuration.
+- The HTTP service returned `200 OK` on port 8080.
+- Stopping the process removed the listener and caused the health check to fail.
+- Restarting the process restored the listener after a short startup period.
+- Container routing and DNS resolution operated successfully.
+- No AWS resources were created.
+
+### Troubleshooting sequence
+
+1. Check whether the process exists.
+2. Check whether the expected port is listening.
+3. Test the application endpoint.
+4. Inspect logs for evidence.
+5. Restart the process.
+6. Allow a startup grace period.
+7. Repeat the health check.
+
+### Questions to revisit
+
+- How should a production service be managed with `systemd` and inspected with `journalctl`?
+- How should application logs be rotated and retained?
+- How should Docker and ALB health-check timing be configured?
+- How should application configuration and secrets be supplied securely?
